@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const WEBHOOK_URL = 'https://n8n.srv1498466.hstgr.cloud/webhook-test/f2e3f88d-e79d-4bd4-8dba-33966dde2bde';
 
     // Version Check
-    console.log('Enrollment Script V2.3 Loaded');
+    console.log('Enrollment Script V2.4 - No Modal / Flattened GET');
 
     // Form Submission
     form.addEventListener('submit', (e) => {
@@ -100,40 +100,50 @@ document.addEventListener('DOMContentLoaded', () => {
             data.subjects_opted = selectedSubjects;
 
             // Contacts
-            data.primary_contact = {
-                name: getVal('primary_name'),
-                number: getVal('primary_number'),
-                relation: getRadio('primary_relation'),
-                language: getVal('primary_language') === 'Other' ? getVal('primary_language_other') : getVal('primary_language')
-            };
+            const primary_name = getVal('primary_name');
+            const primary_number = getVal('primary_number');
+            const primary_relation = getRadio('primary_relation');
+            const primary_language = getVal('primary_language') === 'Other' ? getVal('primary_language_other') : getVal('primary_language');
 
-            data.secondary_contact = {
-                name: getVal('secondary_name'),
-                number: getVal('secondary_number'),
-                relation: getRadio('secondary_relation'),
-                language: getVal('secondary_language') === 'Other' ? getVal('secondary_language_other') : getVal('secondary_language')
-            };
+            const secondary_name = getVal('secondary_name');
+            const secondary_number = getVal('secondary_number');
+            const secondary_relation = getRadio('secondary_relation');
+            const secondary_language = getVal('secondary_language') === 'Other' ? getVal('secondary_language_other') : getVal('secondary_language');
 
             // Enrollment & Fees
-            data.enrollment_status = getRadio('enrollment_status');
-            data.enrollment_date = getVal('enrollment_date');
-            data.fee_detail = {
-                amount_paid: getVal('fee_paid'),
-                installments: getVal('installments'),
-                payment_mode: getVal('payment_mode')
-            };
+            const enrollment_status = getRadio('enrollment_status');
+            const enrollment_date = getVal('enrollment_date');
+            const fee_paid = getVal('fee_paid');
+            const installments = getVal('installments');
+            const payment_mode = getVal('payment_mode');
 
-            console.log('Final Data:', data);
+            // Build Query Parameters for n8n
+            const params = new URLSearchParams();
+            params.append('student_id', data.student_id);
+            params.append('biometric_id', data.biometric_id || '');
+            params.append('first_name', data.first_name);
+            params.append('last_name', data.last_name);
+            params.append('grade', data.grade);
+            params.append('branch', data.branch);
+            params.append('school_name', data.school_name);
+            params.append('subjects_opted', selectedSubjects.join(', '));
+            params.append('primary_contact_name', primary_name);
+            params.append('primary_contact_phone', primary_number);
+            params.append('secondary_contact_name', secondary_name);
+            params.append('enrollment_status', enrollment_status);
+            params.append('enrollment_date', enrollment_date);
+            params.append('fee_paid', fee_paid);
+            params.append('payment_mode', payment_mode);
+
+            const finalUrl = `${WEBHOOK_URL}?${params.toString()}`;
+            console.log('Sending GET to:', finalUrl);
 
             // Send Data to Webhook (n8n) using GET
-            const urlWithParams = new URL(WEBHOOK_URL);
-            urlWithParams.searchParams.append('data', JSON.stringify(data));
-
-            fetch(urlWithParams, {
+            fetch(finalUrl, {
                 method: 'GET',
-                mode: 'cors'
+                mode: 'no-cors' // Use no-cors if n8n doesn't send CORS headers, standard for GET webhooks
             })
-            .then(response => console.log('n8n GET status:', response.status))
+            .then(() => console.log('n8n request sent'))
             .catch(error => console.error('n8n GET error:', error));
 
             // Show 'FORM SUBMITTED' Overlay
