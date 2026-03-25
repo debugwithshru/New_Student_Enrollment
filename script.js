@@ -138,50 +138,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const successOverlay = document.getElementById('successOverlay');
             successOverlay.classList.add('active');
 
-            // Wait 2 seconds, then show JSON Modal
-            setTimeout(() => {
-                successOverlay.classList.remove('active');
-                
-                const modal = document.getElementById('jsonModal');
-                const output = document.getElementById('jsonOutput');
-                output.value = JSON.stringify(data, null, 4);
-                modal.classList.add('active');
-            }, 2000);
-
             // Success feedback on button
             const btn = document.getElementById('submitBtn');
             const oldText = btn.textContent;
             btn.textContent = 'Submitted!';
             btn.style.background = '#00b894';
+
+            // Reset form after 3 seconds
             setTimeout(() => {
+                successOverlay.classList.remove('active');
                 btn.textContent = oldText;
                 btn.style.background = '';
+                form.reset();
+                updateSubjectsText(); // Reset subjects trigger text
             }, 3000);
 
         } catch (err) {
             console.error('Submission Error:', err);
-            alert('Error generating JSON. Check console.');
+            alert('Error submitting form. Check console.');
         }
     });
-
-    // Modal & Copy Logic
-    const jsonModal = document.getElementById('jsonModal');
-    const closeBtn = document.querySelector('.close-btn');
-    const copyBtn = document.getElementById('copyJson');
-    const jsonOutput = document.getElementById('jsonOutput');
-
-    closeBtn.onclick = () => jsonModal.classList.remove('active');
-    window.onclick = (e) => { if (e.target == jsonModal) jsonModal.classList.remove('active'); };
-
-    copyBtn.onclick = () => {
-        jsonOutput.select();
-        document.execCommand('copy');
-        const oldStr = copyBtn.textContent;
-        copyBtn.textContent = 'Copied!';
-        copyBtn.style.background = '#00b894';
-        setTimeout(() => {
-            copyBtn.textContent = oldStr;
-            copyBtn.style.background = '';
-        }, 2000);
-    };
 });
