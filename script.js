@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const WEBHOOK_URL = 'https://n8n.srv1498466.hstgr.cloud/webhook-test/f2e3f88d-e79d-4bd4-8dba-33966dde2bde';
 
     // Version Check
-    console.log('Enrollment Script V2.4 - No Modal / Flattened GET');
+    console.log('Enrollment Script V2.6 - Full Fields GET');
 
     // Form Submission
     form.addEventListener('submit', (e) => {
@@ -79,15 +79,15 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             // Basic Info
-            data.student_id = getVal('student_id');
-            data.biometric_id = getVal('biometric_id');
-            data.first_name = getVal('first_name');
-            data.last_name = getVal('last_name');
-            data.grade = getRadio('grade');
-            data.branch = getRadio('branch');
-            data.school_name = getVal('school_name');
+            const student_id = getVal('student_id');
+            const biometric_id = getVal('biometric_id') || '';
+            const first_name = getVal('first_name');
+            const last_name = getVal('last_name');
+            const grade = getRadio('grade');
+            const branch = getRadio('branch');
+            const school_name = getVal('school_name');
             
-            // Subjects (Multi)
+            // Subjects
             const selectedSubjects = Array.from(form.querySelectorAll('input[name="subjects"]:checked'))
                 .map(cb => cb.value);
             
@@ -97,14 +97,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 subjectsSelect.classList.add('active');
                 return;
             }
-            data.subjects_opted = selectedSubjects;
 
-            // Contacts
+            // Primary Contact
             const primary_name = getVal('primary_name');
             const primary_number = getVal('primary_number');
             const primary_relation = getRadio('primary_relation');
             const primary_language = getVal('primary_language') === 'Other' ? getVal('primary_language_other') : getVal('primary_language');
 
+            // Secondary Contact
             const secondary_name = getVal('secondary_name');
             const secondary_number = getVal('secondary_number');
             const secondary_relation = getRadio('secondary_relation');
@@ -117,34 +117,39 @@ document.addEventListener('DOMContentLoaded', () => {
             const installments = getVal('installments');
             const payment_mode = getVal('payment_mode');
 
-            // Build Query Parameters for n8n
+            // Build Params for n8n
             const params = new URLSearchParams();
-            params.append('student_id', data.student_id);
-            params.append('biometric_id', data.biometric_id || '');
-            params.append('first_name', data.first_name);
-            params.append('last_name', data.last_name);
-            params.append('grade', data.grade);
-            params.append('branch', data.branch);
-            params.append('school_name', data.school_name);
+            params.append('student_id', student_id);
+            params.append('biometric_id', biometric_id);
+            params.append('first_name', first_name);
+            params.append('last_name', last_name);
+            params.append('grade', grade);
+            params.append('branch', branch);
+            params.append('school_name', school_name);
             params.append('subjects_opted', selectedSubjects.join(', '));
+            
             params.append('primary_contact_name', primary_name);
             params.append('primary_contact_phone', primary_number);
+            params.append('primary_contact_relation', primary_relation);
+            params.append('primary_language', primary_language);
+            
             params.append('secondary_contact_name', secondary_name);
+            params.append('secondary_contact_phone', secondary_number);
+            params.append('secondary_contact_relation', secondary_relation);
+            params.append('secondary_language', secondary_language);
+            
             params.append('enrollment_status', enrollment_status);
             params.append('enrollment_date', enrollment_date);
             params.append('fee_paid', fee_paid);
+            params.append('installments', installments);
             params.append('payment_mode', payment_mode);
 
             const finalUrl = `${WEBHOOK_URL}?${params.toString()}`;
-            console.log('Sending GET to:', finalUrl);
+            console.log('Submitting to:', finalUrl);
 
-            // Send Data to Webhook (n8n) using GET
-            fetch(finalUrl, {
-                method: 'GET',
-                mode: 'no-cors' // Use no-cors if n8n doesn't send CORS headers, standard for GET webhooks
-            })
-            .then(() => console.log('n8n request sent'))
-            .catch(error => console.error('n8n GET error:', error));
+            fetch(finalUrl, { method: 'GET', mode: 'no-cors' })
+            .then(() => console.log('Successfully sent to n8n'))
+            .catch(error => console.error('Error sending to n8n:', error));
 
             // Show 'FORM SUBMITTED' Overlay
             const successOverlay = document.getElementById('successOverlay');
