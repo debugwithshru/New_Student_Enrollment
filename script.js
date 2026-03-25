@@ -56,8 +56,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Webhook Configuration - CHANGE THIS LINE FOR PRODUCTION
+    const WEBHOOK_URL = 'https://n8n.srv1498466.hstgr.cloud/webhook-test/f2e3f88d-e79d-4bd4-8dba-33966dde2bde';
+
     // Version Check
-    console.log('Enrollment Script V2.1 Loaded');
+    console.log('Enrollment Script V2.2 Loaded');
 
     // Form Submission
     form.addEventListener('submit', (e) => {
@@ -121,6 +124,15 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             console.log('Final Data:', data);
+
+            // Send Data to Webhook (n8n)
+            fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => console.log('n8n response:', response.status))
+            .catch(error => console.error('n8n error:', error));
 
             // Show 'FORM SUBMITTED' Overlay
             const successOverlay = document.getElementById('successOverlay');
