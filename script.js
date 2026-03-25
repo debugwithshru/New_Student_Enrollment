@@ -56,72 +56,120 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Version Check
+    console.log('Enrollment Script V2.1 Loaded');
+
     // Form Submission
     form.addEventListener('submit', (e) => {
         e.preventDefault();
+        console.log('Form Submit Triggered');
         
-        const formData = new FormData(form);
-        const data = {};
+        try {
+            const formData = new FormData(form);
+            const data = {};
 
-        // Helper to get radio value
-        const getRadioValue = (name) => {
-            const radio = form.querySelector(`input[name="${name}"]:checked`);
-            return radio ? radio.value : null;
-        };
+            // Helper to get radio/check value
+            const getVal = (name) => formData.get(name);
+            const getRadio = (name) => {
+                const el = form.querySelector(`input[name="${name}"]:checked`);
+                return el ? el.value : null;
+            };
 
-        // Standard fields
-        data.student_id = formData.get('student_id');
-        data.biometric_id = formData.get('biometric_id');
-        data.first_name = formData.get('first_name');
-        data.last_name = formData.get('last_name');
-        data.grade = getRadioValue('grade');
-        data.branch = getRadioValue('branch');
-        data.school_name = formData.get('school_name');
-        
-        // Multi-select subjects
-        data.subjects_opted = Array.from(subjectsOptions)
-            .filter(opt => opt.checked)
-            .map(opt => opt.value);
+            // Basic Info
+            data.student_id = getVal('student_id');
+            data.biometric_id = getVal('biometric_id');
+            data.first_name = getVal('first_name');
+            data.last_name = getVal('last_name');
+            data.grade = getRadio('grade');
+            data.branch = getRadio('branch');
+            data.school_name = getVal('school_name');
+            
+            // Subjects (Multi)
+            const selectedSubjects = Array.from(form.querySelectorAll('input[name="subjects"]:checked'))
+                .map(cb => cb.value);
+            
+            if (selectedSubjects.length < 5) {
+                alert('Rule: Minimum 5 subjects must be selected.');
+                subjectsSelect.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                subjectsSelect.classList.add('active');
+                return;
+            }
+            data.subjects_opted = selectedSubjects;
 
-        // Primary Contact
-        data.primary_contact_name = formData.get('primary_name');
-        data.primary_contact_number = formData.get('primary_number');
-        data.primary_contact_relation = getRadioValue('primary_relation');
-        data.primary_language = formData.get('primary_language') === 'Other' 
-            ? formData.get('primary_language_other') 
-            : formData.get('primary_language');
+            // Contacts
+            data.primary_contact = {
+                name: getVal('primary_name'),
+                number: getVal('primary_number'),
+                relation: getRadio('primary_relation'),
+                language: getVal('primary_language') === 'Other' ? getVal('primary_language_other') : getVal('primary_language')
+            };
 
-        // Secondary Contact
-        data.secondary_contact_name = formData.get('secondary_name');
-        data.secondary_contact_number = formData.get('secondary_number');
-        data.secondary_contact_relation = getRadioValue('secondary_relation');
-        data.secondary_language = formData.get('secondary_language') === 'Other' 
-            ? formData.get('secondary_language_other') 
-            : formData.get('secondary_language');
+            data.secondary_contact = {
+                name: getVal('secondary_name'),
+                number: getVal('secondary_number'),
+                relation: getRadio('secondary_relation'),
+                language: getVal('secondary_language') === 'Other' ? getVal('secondary_language_other') : getVal('secondary_language')
+            };
 
-        // Enrollment
-        data.enrollment_status = getRadioValue('enrollment_status');
-        data.enrollment_date = formData.get('enrollment_date');
+            // Enrollment & Fees
+            data.enrollment_status = getRadio('enrollment_status');
+            data.enrollment_date = getVal('enrollment_date');
+            data.fee_detail = {
+                amount_paid: getVal('fee_paid'),
+                installments: getVal('installments'),
+                payment_mode: getVal('payment_mode')
+            };
 
-        // Fee Details
-        data.fee_amount_paid = formData.get('fee_paid');
-        data.installments = formData.get('installments');
-        data.payment_mode = formData.get('payment_mode');
+            console.log('Final Data:', data);
 
-        // Final payload structure for n8n/Sheets
-        console.log('Enrollment Data:', data);
-        
-        // Show success message (simple version)
-        const submitBtn = form.querySelector('.submit-btn');
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Enrolling...';
-        submitBtn.disabled = true;
+            // Show 'FORM SUBMITTED' Overlay
+            const successOverlay = document.getElementById('successOverlay');
+            successOverlay.classList.add('active');
 
-        setTimeout(() => {
-            alert('Student Registered Successfully!\nData logged to console.');
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
-            // form.reset(); // Uncomment to reset form after success
-        }, 1000);
+            // Wait 2 seconds, then show JSON Modal
+            setTimeout(() => {
+                successOverlay.classList.remove('active');
+                
+                const modal = document.getElementById('jsonModal');
+                const output = document.getElementById('jsonOutput');
+                output.value = JSON.stringify(data, null, 4);
+                modal.classList.add('active');
+            }, 2000);
+
+            // Success feedback on button
+            const btn = document.getElementById('submitBtn');
+            const oldText = btn.textContent;
+            btn.textContent = 'Submitted!';
+            btn.style.background = '#00b894';
+            setTimeout(() => {
+                btn.textContent = oldText;
+                btn.style.background = '';
+            }, 3000);
+
+        } catch (err) {
+            console.error('Submission Error:', err);
+            alert('Error generating JSON. Check console.');
+        }
     });
+
+    // Modal & Copy Logic
+    const jsonModal = document.getElementById('jsonModal');
+    const closeBtn = document.querySelector('.close-btn');
+    const copyBtn = document.getElementById('copyJson');
+    const jsonOutput = document.getElementById('jsonOutput');
+
+    closeBtn.onclick = () => jsonModal.classList.remove('active');
+    window.onclick = (e) => { if (e.target == jsonModal) jsonModal.classList.remove('active'); };
+
+    copyBtn.onclick = () => {
+        jsonOutput.select();
+        document.execCommand('copy');
+        const oldStr = copyBtn.textContent;
+        copyBtn.textContent = 'Copied!';
+        copyBtn.style.background = '#00b894';
+        setTimeout(() => {
+            copyBtn.textContent = oldStr;
+            copyBtn.style.background = '';
+        }, 2000);
+    };
 });

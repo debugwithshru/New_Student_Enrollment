@@ -152,20 +152,20 @@
                 <h3 class="section-title">Secondary Contact</h3>
                 <div class="grid-row">
                     <div class="input-group">
-                        <label for="secondary_name">Contact Name</label>
-                        <input type="text" id="secondary_name" name="secondary_name" placeholder="Full Name">
+                        <label for="secondary_name">Contact Name <span class="required">*</span></label>
+                        <input type="text" id="secondary_name" name="secondary_name" placeholder="Full Name" required>
                     </div>
                     <div class="input-group">
-                        <label for="secondary_number">Phone Number</label>
-                        <input type="tel" id="secondary_number" name="secondary_number" placeholder="10-digit number">
+                        <label for="secondary_number">Phone Number <span class="required">*</span></label>
+                        <input type="tel" id="secondary_number" name="secondary_number" placeholder="10-digit number" required>
                     </div>
                 </div>
                 <div class="grid-row">
                     <div class="input-group">
-                        <label>Relation</label>
+                        <label>Relation <span class="required">*</span></label>
                         <div class="radio-group">
                             <label class="radio-button">
-                                <input type="radio" name="secondary_relation" value="Father">
+                                <input type="radio" name="secondary_relation" value="Father" required>
                                 <span>Father</span>
                             </label>
                             <label class="radio-button">
@@ -179,8 +179,8 @@
                         </div>
                     </div>
                     <div class="input-group">
-                        <label for="secondary_language">Secondary Language</label>
-                        <select id="secondary_language" name="secondary_language" onchange="toggleOtherLanguage(this, 'secondary_language_other')">
+                        <label for="secondary_language">Secondary Language <span class="required">*</span></label>
+                        <select id="secondary_language" name="secondary_language" required onchange="toggleOtherLanguage(this, 'secondary_language_other')">
                             <option value="Hindi">Hindi</option>
                             <option value="Marathi">Marathi</option>
                             <option value="English">English</option>
@@ -239,11 +239,30 @@
                 </div>
             </section>
 
+            <div id="successOverlay" class="success-overlay">
+                <div class="success-card">
+                    <div class="success-icon">✓</div>
+                    <h2>FORM SUBMITTED</h2>
+                    <p>Student enrollment data has been captured successfully.</p>
+                </div>
+            </div>
+
             <div class="form-actions">
-                <button type="submit" class="submit-btn">Register Student</button>
+                <button type="submit" class="submit-btn" id="submitBtn">Register Student</button>
             </div>
         </form>
     </div>
+    <!-- JSON Output Modal -->
+    <div id="jsonModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3 class="modal-title">Final Enrollment JSON</h3>
+            <p class="modal-subtitle">Copy the JSON below for your sheet/n8n integration.</p>
+            <textarea id="jsonOutput" readonly></textarea>
+            <button id="copyJson" class="copy-btn">Copy to Clipboard</button>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
