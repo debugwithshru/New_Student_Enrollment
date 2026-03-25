@@ -215,53 +215,27 @@
                 </div>
             </section>
 
-            <!-- Section 5: Prior Academic Record -->
+            <!-- Section 5: Fee Details -->
             <section>
-                <h3 class="section-title">Prior Academic Record</h3>
+                <h3 class="section-title">Fee Details</h3>
                 <div class="grid-row">
                     <div class="input-group">
-                        <label for="prior_school">Prior School Name</label>
-                        <select id="prior_school" name="prior_school">
-                            <option value="" disabled selected>Select School</option>
-                            <option value="DAV">DAV</option>
-                            <option value="NHP">NHP</option>
-                            <option value="DMWA">DMWA</option>
-                            <option value="NHS">NHS</option>
-                        </select>
+                        <label for="fee_paid">Fee Amount Paid <span class="required">*</span></label>
+                        <input type="number" id="fee_paid" name="fee_paid" placeholder="Enter amount" required>
                     </div>
                     <div class="input-group">
-                        <label for="prior_exam">Exam Name</label>
-                        <input type="text" id="prior_exam" name="prior_exam" placeholder="e.g. Final Semester 2024">
+                        <label for="installments">No. of Installments <span class="required">*</span></label>
+                        <input type="number" id="installments" name="installments" placeholder="e.g. 1" required>
                     </div>
                 </div>
-
-                <div class="marks-container">
-                    <p class="section-subtitle">Prior Year Marks (Obtained / Max)</p>
-                    <div class="marks-table">
-                        <div class="marks-header">Subject</div>
-                        <div class="marks-header">Obtained</div>
-                        <div class="marks-header">Max</div>
-
-                        <div class="subject-label">Maths</div>
-                        <input type="number" name="prior_maths_ob" placeholder="0">
-                        <input type="number" name="prior_maths_max" placeholder="100">
-
-                        <div class="subject-label">Science</div>
-                        <input type="number" name="prior_science_ob" placeholder="0">
-                        <input type="number" name="prior_science_max" placeholder="100">
-
-                        <div class="subject-label">English</div>
-                        <input type="number" name="prior_english_ob" placeholder="0">
-                        <input type="number" name="prior_english_max" placeholder="100">
-
-                        <div class="subject-label">Social Science</div>
-                        <input type="number" name="prior_socsci_ob" placeholder="0">
-                        <input type="number" name="prior_socsci_max" placeholder="100">
-
-                        <div class="subject-label">2nd Language</div>
-                        <input type="number" name="prior_lang2_ob" placeholder="0">
-                        <input type="number" name="prior_lang2_max" placeholder="100">
-                    </div>
+                <div class="input-group">
+                    <label for="payment_mode">Payment Mode <span class="required">*</span></label>
+                    <select id="payment_mode" name="payment_mode" required>
+                        <option value="" disabled selected>Select Mode</option>
+                        <option value="Cheque">Cheque</option>
+                        <option value="UPI">UPI</option>
+                        <option value="Cash">Cash</option>
+                    </select>
                 </div>
             </section>
 

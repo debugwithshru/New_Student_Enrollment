@@ -103,21 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
         data.enrollment_status = getRadioValue('enrollment_status');
         data.enrollment_date = formData.get('enrollment_date');
 
-        // Prior Academic Record
-        data.prior_year_school = formData.get('prior_school');
-        data.prior_year_exam_name = formData.get('prior_exam');
-        
-        // Marks
-        data.prior_maths_obtained = formData.get('prior_maths_ob');
-        data.prior_maths_max = formData.get('prior_maths_max');
-        data.prior_science_obtained = formData.get('prior_science_ob');
-        data.prior_science_max = formData.get('prior_science_max');
-        data.prior_english_obtained = formData.get('prior_english_ob');
-        data.prior_english_max = formData.get('prior_english_max');
-        data.prior_socsci_obtained = formData.get('prior_socsci_ob');
-        data.prior_socsci_max = formData.get('prior_socsci_max');
-        data.prior_secondlang_obtained = formData.get('prior_lang2_ob');
-        data.prior_secondlang_max = formData.get('prior_lang2_max');
+        // Fee Details
+        data.fee_amount_paid = formData.get('fee_paid');
+        data.installments = formData.get('installments');
+        data.payment_mode = formData.get('payment_mode');
 
         // Final payload structure for n8n/Sheets
         console.log('Enrollment Data:', data);
