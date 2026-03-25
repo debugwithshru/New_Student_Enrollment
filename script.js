@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const WEBHOOK_URL = 'https://n8n.srv1498466.hstgr.cloud/webhook-test/f2e3f88d-e79d-4bd4-8dba-33966dde2bde';
 
     // Version Check
-    console.log('Enrollment Script V2.2 Loaded');
+    console.log('Enrollment Script V2.3 Loaded');
 
     // Form Submission
     form.addEventListener('submit', (e) => {
@@ -125,14 +125,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             console.log('Final Data:', data);
 
-            // Send Data to Webhook (n8n)
-            fetch(WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+            // Send Data to Webhook (n8n) using GET
+            const urlWithParams = new URL(WEBHOOK_URL);
+            urlWithParams.searchParams.append('data', JSON.stringify(data));
+
+            fetch(urlWithParams, {
+                method: 'GET',
+                mode: 'cors'
             })
-            .then(response => console.log('n8n response:', response.status))
-            .catch(error => console.error('n8n error:', error));
+            .then(response => console.log('n8n GET status:', response.status))
+            .catch(error => console.error('n8n GET error:', error));
 
             // Show 'FORM SUBMITTED' Overlay
             const successOverlay = document.getElementById('successOverlay');
