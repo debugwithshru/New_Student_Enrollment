@@ -143,6 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
             params.append('fee_paid', fee_paid);
             params.append('installments', installments);
             params.append('payment_mode', payment_mode);
+            params.append('submission_date', new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }));
 
             const finalUrl = `${WEBHOOK_URL}?${params.toString()}`;
             console.log('Submitting to:', finalUrl);
