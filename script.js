@@ -36,8 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             // Basic Info
-            const student_id = getVal('student_id');
-            const biometric_id = getVal('biometric_id') || '';
             const first_name = getVal('first_name');
             const last_name = getVal('last_name');
             const grade = getRadio('grade');
@@ -73,8 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Build Params for n8n
             const params = new URLSearchParams();
-            params.append('student_id', student_id);
-            params.append('biometric_id', biometric_id);
             params.append('first_name', first_name);
             params.append('last_name', last_name);
             params.append('grade', grade);
@@ -111,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Automatically Redirect after 3.5 seconds to open Fee form in the same window
                 setTimeout(() => {
-                    const feeUrl = `https://student-fee-management.vercel.app/index.html?STUDENT_ID=${student_id}&STUDENT_NAME=${first_name}%20${last_name}&GRADE=${grade}&BRANCH=${branch}`;
+                    const feeUrl = `https://student-fee-management.vercel.app/index.html?STUDENT_NAME=${first_name}%20${last_name}&GRADE=${grade}&BRANCH=${branch}`;
                     window.location.href = feeUrl;
                 }, 3500); 
             })
