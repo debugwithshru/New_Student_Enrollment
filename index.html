@@ -79,26 +79,27 @@
                     <label for="school_name">School Name <span class="required">*</span></label>
                     <select id="school_name" name="school_name" required>
                         <option value="" disabled selected>Select School</option>
-                        <option value="DAV">DAV</option>
-                        <option value="NHP">NHP</option>
-                        <option value="DMWA">DMWA</option>
-                        <option value="NHS">NHS</option>
+                        <option value="D.A.V. PUBLIC SCHOOL">D.A.V. PUBLIC SCHOOL</option>
+                        <option value="NEW HORIZON PUBLIC SCHOOL">NEW HORIZON PUBLIC SCHOOL</option>
+                        <option value="DATTA MEGHE WORLD ACADEMY">DATTA MEGHE WORLD ACADEMY</option>
+                        <option value="NEW HORIZON SCHOLARS SCHOOL">NEW HORIZON SCHOLARS SCHOOL</option>
+                        <option value="ZENITH INTERNATIONAL & PETITE KIDS SCHOOL">ZENITH INTERNATIONAL & PETITE KIDS SCHOOL</option>
+                        <option value="PHOENIX INTERNATIONAL SCHOOL">PHOENIX INTERNATIONAL SCHOOL</option>
+                        <option value="VIBGYOR HIGH SCHOOL">VIBGYOR HIGH SCHOOL</option>
+                        <option value="RELIANCE FOUNDATION SCHOOLS">RELIANCE FOUNDATION SCHOOLS</option>
                     </select>
                 </div>
 
                 <div class="input-group">
                     <label>Subjects Opted <span class="required">*</span></label>
-                    <div class="multi-select" id="subjectsSelect">
-                        <div class="multi-select-trigger">Select Subjects...</div>
-                        <div class="multi-select-options">
-                            <label><input type="checkbox" name="subjects" value="Maths"> Maths</label>
-                            <label><input type="checkbox" name="subjects" value="Science"> Science</label>
-                            <label><input type="checkbox" name="subjects" value="Social Science"> Social Science</label>
-                            <label><input type="checkbox" name="subjects" value="English"> English</label>
-                            <label><input type="checkbox" name="subjects" value="Hindi"> Hindi</label>
-                            <label><input type="checkbox" name="subjects" value="Marathi"> Marathi</label>
-                            <label><input type="checkbox" name="subjects" value="Sanskrit"> Sanskrit</label>
-                        </div>
+                    <div class="checkbox-grid">
+                        <label class="checkbox-item"><input type="checkbox" name="subjects" value="Maths" checked> Maths</label>
+                        <label class="checkbox-item"><input type="checkbox" name="subjects" value="Science" checked> Science</label>
+                        <label class="checkbox-item"><input type="checkbox" name="subjects" value="Social Science" checked> Social Science</label>
+                        <label class="checkbox-item"><input type="checkbox" name="subjects" value="English" checked> English</label>
+                        <label class="checkbox-item"><input type="checkbox" name="subjects" value="Hindi"> Hindi</label>
+                        <label class="checkbox-item"><input type="checkbox" name="subjects" value="Marathi"> Marathi</label>
+                        <label class="checkbox-item"><input type="checkbox" name="subjects" value="Sanskrit"> Sanskrit</label>
                     </div>
                 </div>
             </section>
@@ -212,30 +213,6 @@
                         <label for="enrollment_date">Enrollment Date <span class="required">*</span></label>
                         <input type="date" id="enrollment_date" name="enrollment_date" required>
                     </div>
-                </div>
-            </section>
-
-            <!-- Section 5: Fee Details -->
-            <section>
-                <h3 class="section-title">Fee Details</h3>
-                <div class="grid-row">
-                    <div class="input-group">
-                        <label for="fee_paid">Fee Amount Paid <span class="required">*</span></label>
-                        <input type="number" id="fee_paid" name="fee_paid" placeholder="Enter amount" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="installments">No. of Installments <span class="required">*</span></label>
-                        <input type="number" id="installments" name="installments" placeholder="e.g. 1" required>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label for="payment_mode">Payment Mode <span class="required">*</span></label>
-                    <select id="payment_mode" name="payment_mode" required>
-                        <option value="" disabled selected>Select Mode</option>
-                        <option value="Cheque">Cheque</option>
-                        <option value="UPI">UPI</option>
-                        <option value="Cash">Cash</option>
-                    </select>
                 </div>
             </section>
 

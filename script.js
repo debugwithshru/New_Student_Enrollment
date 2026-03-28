@@ -1,49 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('enrollmentForm');
     const enrollmentDateInput = document.getElementById('enrollment_date');
-    const subjectsSelect = document.getElementById('subjectsSelect');
-    const subjectsTrigger = subjectsSelect.querySelector('.multi-select-trigger');
-    const subjectsOptions = subjectsSelect.querySelectorAll('input[name="subjects"]');
-
-    // Set default enrollment date to today
-    const today = new Date().toISOString().split('T')[0];
-    enrollmentDateInput.value = today;
-
-    // Multi-select dropdown logic
-    subjectsTrigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        subjectsSelect.classList.toggle('active');
-    });
-
-    // Close multi-select when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!subjectsSelect.contains(e.target)) {
-            subjectsSelect.classList.remove('active');
-        }
-    });
-
-    // Update trigger text for multi-select
-    const updateSubjectsText = () => {
-        const selected = Array.from(subjectsOptions)
-            .filter(opt => opt.checked)
-            .map(opt => opt.value);
-        
-        if (selected.length === 0) {
-            subjectsTrigger.textContent = 'Select Subjects...';
-            subjectsTrigger.style.color = '#636e72';
-        } else if (selected.length <= 2) {
-            subjectsTrigger.textContent = selected.join(', ');
-            subjectsTrigger.style.color = '#2d3436';
-        } else {
-            subjectsTrigger.textContent = `${selected.length} Subjects Selected`;
-            subjectsTrigger.style.color = '#2d3436';
-        }
-    };
-
-    subjectsOptions.forEach(opt => {
-        opt.addEventListener('change', updateSubjectsText);
-    });
-
     // Toggle "Other" Language logic
     window.toggleOtherLanguage = (selectElement, otherInputId) => {
         const otherInput = document.getElementById(otherInputId);
@@ -60,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const WEBHOOK_URL = 'https://n8n.srv1498466.hstgr.cloud/webhook/f2e3f88d-e79d-4bd4-8dba-33966dde2bde'; 
 
     // Version Check
-    console.log('Enrollment Script V2.6 - Full Fields GET');
+    console.log('Enrollment Script V2.7 - Modified UI');
 
     // Form Submission
     form.addEventListener('submit', (e) => {
@@ -93,8 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (selectedSubjects.length < 5) {
                 alert('Rule: Minimum 5 subjects must be selected.');
-                subjectsSelect.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                subjectsSelect.classList.add('active');
+                const grid = document.querySelector('.checkbox-grid');
+                if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
             }
 
@@ -110,12 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const secondary_relation = getRadio('secondary_relation');
             const secondary_language = getVal('secondary_language') === 'Other' ? getVal('secondary_language_other') : getVal('secondary_language');
 
-            // Enrollment & Fees
+            // Enrollment Details
             const enrollment_status = getRadio('enrollment_status');
             const enrollment_date = getVal('enrollment_date');
-            const fee_paid = getVal('fee_paid');
-            const installments = getVal('installments');
-            const payment_mode = getVal('payment_mode');
 
             // Build Params for n8n
             const params = new URLSearchParams();
@@ -140,9 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             params.append('enrollment_status', enrollment_status);
             params.append('enrollment_date', enrollment_date);
-            params.append('fee_paid', fee_paid);
-            params.append('installments', installments);
-            params.append('payment_mode', payment_mode);
             params.append('submission_date', new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }));
 
             const finalUrl = `${WEBHOOK_URL}?${params.toString()}`;
