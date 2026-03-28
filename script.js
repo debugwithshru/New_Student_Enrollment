@@ -149,27 +149,29 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Submitting to:', finalUrl);
 
             fetch(finalUrl, { method: 'GET', mode: 'no-cors' })
-            .then(() => console.log('Successfully sent to n8n'))
-            .catch(error => console.error('Error sending to n8n:', error));
+            .then(() => {
+                console.log('Successfully sent to n8n');
+                
+                // Success feedback on button
+                const btn = document.getElementById('submitBtn');
+                const oldText = btn.textContent;
+                btn.textContent = 'Redirecting to Fees...';
+                btn.style.background = '#00b894';
+
+                // Automatically Redirect after 3.5 seconds to open Fee form in the same window
+                setTimeout(() => {
+                    const feeUrl = `https://student-fee-management.vercel.app/index.html?STUDENT_ID=${student_id}&STUDENT_NAME=${first_name}%20${last_name}&GRADE=${grade}&BRANCH=${branch}`;
+                    window.location.href = feeUrl;
+                }, 3500); 
+            })
+            .catch(error => {
+                console.error('Error sending to n8n:', error);
+                alert('Connection error. Please try again.');
+            });
 
             // Show 'FORM SUBMITTED' Overlay
             const successOverlay = document.getElementById('successOverlay');
             successOverlay.classList.add('active');
-
-            // Success feedback on button
-            const btn = document.getElementById('submitBtn');
-            const oldText = btn.textContent;
-            btn.textContent = 'Submitted!';
-            btn.style.background = '#00b894';
-
-            // Reset form after 3 seconds
-            setTimeout(() => {
-                successOverlay.classList.remove('active');
-                btn.textContent = oldText;
-                btn.style.background = '';
-                form.reset();
-                updateSubjectsText(); // Reset subjects trigger text
-            }, 3000);
 
         } catch (err) {
             console.error('Submission Error:', err);
