@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Enrollment Details
             const enrollment_status = getRadio('enrollment_status');
             const enrollment_date = getVal('enrollment_date');
+            const combo_package = getRadio('combo_package');
 
             // Build Params for n8n
             const params = new URLSearchParams();
@@ -90,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             params.append('enrollment_status', enrollment_status);
             params.append('enrollment_date', enrollment_date);
+            params.append('combo_package', combo_package);
             params.append('submission_date', new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }));
 
             const finalUrl = `${WEBHOOK_URL}?${params.toString()}`;
