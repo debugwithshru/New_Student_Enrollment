@@ -38,9 +38,22 @@ document.addEventListener('DOMContentLoaded', () => {
             // Basic Info
             const first_name = getVal('first_name');
             const last_name = getVal('last_name');
+            const gender = getRadio('gender');
+            const dobRaw = getVal('dob');
             const grade = getRadio('grade');
             const branch = getRadio('branch');
             const school_name = getVal('school_name');
+
+            // Format DOB to dd-mm-yy
+            let dob = '';
+            if (dobRaw) {
+                const [y, m, d] = dobRaw.split('-');
+                dob = `${d}-${m}-${y.slice(-2)}`;
+            }
+
+            // Hobbies logic
+            const hobbies_val = getVal('hobbies');
+            const hobbies = hobbies_val === 'Other' ? getVal('hobbies_other') : hobbies_val;
             
             // Subjects
             const selectedSubjects = Array.from(form.querySelectorAll('input[name="subjects"]:checked'))
@@ -74,6 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams();
             params.append('first_name', first_name);
             params.append('last_name', last_name);
+            params.append('gender', gender);
+            params.append('dob', dob);
+            params.append('hobbies', hobbies || '');
             params.append('grade', grade);
             params.append('branch', branch);
             params.append('school_name', school_name);
