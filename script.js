@@ -44,11 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const branch = getRadio('branch');
             const school_name = getVal('school_name');
 
-            // Format DOB to dd-mm-yy
+            // Format DOB to dd-mm-yyyy
             let dob = '';
             if (dobRaw) {
                 const [y, m, d] = dobRaw.split('-');
-                dob = `${d}-${m}-${y.slice(-2)}`;
+                dob = `${d}-${m}-${y}`;
             }
 
             // Hobbies logic
@@ -80,7 +80,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Enrollment Details
             const enrollment_status = getRadio('enrollment_status');
-            const enrollment_date = getVal('enrollment_date');
+            const enrollment_date_raw = getVal('enrollment_date');
+            let enrollment_date = '';
+            if (enrollment_date_raw) {
+                const [y, m, d] = enrollment_date_raw.split('-');
+                enrollment_date = `${d}-${m}-${y}`;
+            }
             const combo_package = getRadio('combo_package');
 
             // Build Params for n8n
