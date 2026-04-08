@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Enrollment Script V2.7 - Modified UI');
 
     // Form Submission
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
         console.log('Form Submit Triggered');
         
@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const grade = getRadio('grade');
             const branch = getRadio('branch');
             const school_name = getVal('school_name');
+            const address = getVal('address');
 
             // Format DOB to dd-mm-yyyy
             let dob = '';
@@ -88,60 +89,62 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const combo_package = getRadio('combo_package');
 
-            // Build Params for n8n
-            const params = new URLSearchParams();
-            params.append('first_name', first_name);
-            params.append('last_name', last_name);
-            params.append('gender', gender);
-            params.append('dob', dob);
-            params.append('hobbies', hobbies || '');
-            params.append('grade', grade);
-            params.append('branch', branch);
-            params.append('school_name', school_name);
-            params.append('subjects_opted', selectedSubjects.join(', '));
-            
-            params.append('primary_contact_name', primary_name);
-            params.append('primary_contact_phone', primary_number);
-            params.append('primary_contact_relation', primary_relation);
-            params.append('primary_language', primary_language);
-            
-            params.append('secondary_contact_name', secondary_name);
-            params.append('secondary_contact_phone', secondary_number);
-            params.append('secondary_contact_relation', secondary_relation);
-            params.append('secondary_language', secondary_language);
-            
-            params.append('enrollment_status', enrollment_status);
-            params.append('enrollment_date', enrollment_date);
-            params.append('combo_package', combo_package);
-            params.append('submission_date', new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }));
+            // Build Payload for n8n
+            const payload = {
+                first_name,
+                last_name,
+                gender,
+                dob,
+                hobbies: hobbies || '',
+                grade,
+                branch,
+                school_name,
+                address,
+                subjects_opted: selectedSubjects.join(', '),
+                primary_contact_name: primary_name,
+                primary_contact_phone: primary_number,
+                primary_contact_relation: primary_relation,
+                primary_language,
+                secondary_contact_name: secondary_name,
+                secondary_contact_phone: secondary_number,
+                secondary_contact_relation: secondary_relation,
+                secondary_language,
+                enrollment_status,
+                enrollment_date,
+                combo_package,
+                submission_date: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+            };
 
-            const finalUrl = `${WEBHOOK_URL}?${params.toString()}`;
-            console.log('Submitting to:', finalUrl);
+            console.log('Submitting Payload:', payload);
 
-            fetch(finalUrl, { method: 'GET', mode: 'no-cors' })
-            .then(() => {
-                console.log('Successfully sent to n8n');
+            const response = await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok || response.status === 0) {
+                console.log('Successfully submitted');
                 
+                // Show 'FORM SUBMITTED' Overlay
+                const successOverlay = document.getElementById('successOverlay');
+                successOverlay.classList.add('active');
+
                 // Success feedback on button
                 const btn = document.getElementById('submitBtn');
-                const oldText = btn.textContent;
                 btn.textContent = 'Redirecting to Fees...';
                 btn.style.background = '#00b894';
 
-                // Automatically Redirect after 3.5 seconds to open Fee form in the same window
+                // Automatically Redirect after 3.5 seconds
                 setTimeout(() => {
                     const feeUrl = `https://student-fee-management.vercel.app/index.html?STUDENT_NAME=${first_name}%20${last_name}&GRADE=${grade}&BRANCH=${branch}`;
                     window.location.href = feeUrl;
                 }, 3500); 
-            })
-            .catch(error => {
-                console.error('Error sending to n8n:', error);
-                alert('Connection error. Please try again.');
-            });
-
-            // Show 'FORM SUBMITTED' Overlay
-            const successOverlay = document.getElementById('successOverlay');
-            successOverlay.classList.add('active');
+            } else {
+                throw new Error('Server responded with ' + response.status);
+            }
 
         } catch (err) {
             console.error('Submission Error:', err);
