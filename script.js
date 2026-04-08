@@ -1,6 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('enrollmentForm');
     const enrollmentDateInput = document.getElementById('enrollment_date');
+    const schoolNameSelect = document.getElementById('school_name');
+    const priorSchoolNameSelect = document.getElementById('prior_school_name');
+
+    // School Name Synchronization
+    schoolNameSelect.addEventListener('change', () => {
+        priorSchoolNameSelect.value = schoolNameSelect.value;
+    });
     // Toggle "Other" Language logic
     window.toggleOtherLanguage = (selectElement, otherInputId) => {
         const otherInput = document.getElementById(otherInputId);
@@ -43,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const grade = getRadio('grade');
             const branch = getRadio('branch');
             const school_name = getVal('school_name');
+            const prior_school_name = getVal('prior_school_name');
             const address = getVal('address');
 
             // Format DOB to dd-mm-yyyy
@@ -99,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 grade,
                 branch,
                 school_name,
+                prior_school_name,
                 address,
                 subjects_opted: selectedSubjects.join(', '),
                 primary_contact_name: primary_name,
