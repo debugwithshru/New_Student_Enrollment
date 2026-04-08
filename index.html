@@ -52,19 +52,26 @@
                     </div>
                 </div>
 
-                <div class="input-group">
-                    <label for="hobbies">Hobbies</label>
-                    <select id="hobbies" name="hobbies" onchange="window.toggleOtherLanguage(this, 'hobbies_other')">
-                        <option value="" disabled selected>Select Hobby</option>
-                        <option value="Dancing">Dancing</option>
-                        <option value="Singing">Singing</option>
-                        <option value="Drama">Drama</option>
-                        <option value="Chess">Chess</option>
-                        <option value="Football">Football</option>
-                        <option value="Cricket">Cricket</option>
-                        <option value="Other">Others</option>
-                    </select>
-                    <input type="text" id="hobbies_other" name="hobbies_other" class="hidden-input" placeholder="Specify hobby">
+                <div class="grid-row">
+                    <div class="input-group">
+                        <label for="hobbies">Hobbies</label>
+                        <select id="hobbies" name="hobbies" onchange="window.toggleOtherLanguage(this, 'hobbies_other')">
+                            <option value="" disabled selected>Select Hobby</option>
+                            <option value="Dancing">Dancing</option>
+                            <option value="Singing">Singing</option>
+                            <option value="Drama">Drama</option>
+                            <option value="Chess">Chess</option>
+                            <option value="Football">Football</option>
+                            <option value="Cricket">Cricket</option>
+                            <option value="Other">Others</option>
+                        </select>
+                        <input type="text" id="hobbies_other" name="hobbies_other" class="hidden-input" placeholder="Specify hobby">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="address">Residential Address <span class="required">*</span></label>
+                        <textarea id="address" name="address" rows="2" placeholder="Full residential address" required></textarea>
+                    </div>
                 </div>
 
                 <div class="grid-row">
@@ -115,10 +122,6 @@
                     </select>
                 </div>
 
-                <div class="input-group">
-                    <label for="address">Residential Address <span class="required">*</span></label>
-                    <textarea id="address" name="address" rows="3" placeholder="Enter full residential address" required></textarea>
-                </div>
 
                 <div class="input-group">
                     <label>Subjects Opted <span class="required">*</span></label>
