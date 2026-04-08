@@ -24,20 +24,20 @@
                 <div class="grid-row">
                     <div class="input-group">
                         <label for="first_name">First Name <span class="required">*</span></label>
-                        <input type="text" id="first_name" name="first_name" placeholder="John" required>
+                        <input type="text" id="first_name" name="first_name" placeholder="John" required autocomplete="given-name">
                     </div>
                     <div class="input-group">
                         <label for="last_name">Last Name <span class="required">*</span></label>
-                        <input type="text" id="last_name" name="last_name" placeholder="Doe" required>
+                        <input type="text" id="last_name" name="last_name" placeholder="Doe" required autocomplete="family-name">
                     </div>
                 </div>
 
                 <div class="grid-row">
                     <div class="input-group">
-                        <label>Gender <span class="required">*</span></label>
+                        <label for="gender_male">Gender <span class="required">*</span></label>
                         <div class="radio-group">
                             <label class="radio-button">
-                                <input type="radio" name="gender" value="Male" required>
+                                <input type="radio" id="gender_male" name="gender" value="Male" required>
                                 <span>Male</span>
                             </label>
                             <label class="radio-button">
@@ -76,10 +76,10 @@
 
                 <div class="grid-row">
                     <div class="input-group">
-                        <label>Grade <span class="required">*</span></label>
+                        <label for="grade_9">Grade <span class="required">*</span></label>
                         <div class="radio-group">
                             <label class="radio-button">
-                                <input type="radio" name="grade" value="9" required>
+                                <input type="radio" id="grade_9" name="grade" value="9" required>
                                 <span>9th</span>
                             </label>
                             <label class="radio-button">
@@ -89,10 +89,10 @@
                         </div>
                     </div>
                     <div class="input-group">
-                        <label>Branch <span class="required">*</span></label>
+                        <label for="branch_a">Branch <span class="required">*</span></label>
                         <div class="radio-group">
                             <label class="radio-button">
-                                <input type="radio" name="branch" value="A" required>
+                                <input type="radio" id="branch_a" name="branch" value="A" required>
                                 <span>A</span>
                             </label>
                             <label class="radio-button">
@@ -160,19 +160,19 @@
                 <div class="grid-row">
                     <div class="input-group">
                         <label for="primary_name">Contact Name <span class="required">*</span></label>
-                        <input type="text" id="primary_name" name="primary_name" placeholder="Full Name" required>
+                        <input type="text" id="primary_name" name="primary_name" placeholder="Full Name" required autocomplete="name">
                     </div>
                     <div class="input-group">
                         <label for="primary_number">Phone Number <span class="required">*</span></label>
-                        <input type="tel" id="primary_number" name="primary_number" placeholder="10-digit number" required>
+                        <input type="tel" id="primary_number" name="primary_number" placeholder="10-digit number" required autocomplete="tel">
                     </div>
                 </div>
                 <div class="grid-row">
                     <div class="input-group">
-                        <label>Relation <span class="required">*</span></label>
+                        <label for="primary_relation_father">Relation <span class="required">*</span></label>
                         <div class="radio-group">
                             <label class="radio-button">
-                                <input type="radio" name="primary_relation" value="Father" required>
+                                <input type="radio" id="primary_relation_father" name="primary_relation" value="Father" required>
                                 <span>Father</span>
                             </label>
                             <label class="radio-button">
@@ -204,19 +204,19 @@
                 <div class="grid-row">
                     <div class="input-group">
                         <label for="secondary_name">Contact Name <span class="required">*</span></label>
-                        <input type="text" id="secondary_name" name="secondary_name" placeholder="Full Name" required>
+                        <input type="text" id="secondary_name" name="secondary_name" placeholder="Full Name" required autocomplete="name">
                     </div>
                     <div class="input-group">
                         <label for="secondary_number">Phone Number <span class="required">*</span></label>
-                        <input type="tel" id="secondary_number" name="secondary_number" placeholder="10-digit number" required>
+                        <input type="tel" id="secondary_number" name="secondary_number" placeholder="10-digit number" required autocomplete="tel">
                     </div>
                 </div>
                 <div class="grid-row">
                     <div class="input-group">
-                        <label>Relation <span class="required">*</span></label>
+                        <label for="secondary_relation_father">Relation <span class="required">*</span></label>
                         <div class="radio-group">
                             <label class="radio-button">
-                                <input type="radio" name="secondary_relation" value="Father" required>
+                                <input type="radio" id="secondary_relation_father" name="secondary_relation" value="Father" required>
                                 <span>Father</span>
                             </label>
                             <label class="radio-button">
@@ -247,10 +247,10 @@
                 <h3 class="section-title">Enrollment Details</h3>
                 <div class="grid-row">
                     <div class="input-group">
-                        <label for="enrollment_status">Status <span class="required">*</span></label>
+                        <label for="enrollment_status_active">Status <span class="required">*</span></label>
                         <div class="radio-group">
                             <label class="radio-button">
-                                <input type="radio" name="enrollment_status" value="Active" checked required>
+                                <input type="radio" id="enrollment_status_active" name="enrollment_status" value="Active" checked required>
                                 <span>Active</span>
                             </label>
                             <label class="radio-button">
@@ -266,10 +266,10 @@
                 </div>
 
                 <div class="input-group">
-                    <label>Combo Package <span class="required">*</span></label>
+                    <label for="combo_yes">Combo Package <span class="required">*</span></label>
                     <div class="radio-group">
                         <label class="radio-button">
-                            <input type="radio" name="combo_package" value="YES" required>
+                            <input type="radio" id="combo_yes" name="combo_package" value="YES" required>
                             <span>YES</span>
                         </label>
                         <label class="radio-button">

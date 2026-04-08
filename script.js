@@ -143,14 +143,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Success feedback on button
                 const btn = document.getElementById('submitBtn');
-                btn.textContent = 'Redirecting to Fees...';
+                btn.textContent = 'Submitted Successfully';
                 btn.style.background = '#00b894';
-
-                // Automatically Redirect after 3.5 seconds
-                setTimeout(() => {
-                    const feeUrl = `https://student-fee-management.vercel.app/index.html?STUDENT_NAME=${first_name}%20${last_name}&GRADE=${grade}&BRANCH=${branch}`;
-                    window.location.href = feeUrl;
-                }, 3500); 
+                btn.disabled = true;
             } else {
                 throw new Error('Server responded with ' + response.status);
             }
