@@ -41,7 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Helper to toggle required attribute
         const setRequired = (container, isRequired) => {
             container.querySelectorAll('input, select, textarea').forEach(el => {
-                // Enrollment date and combo package are already conditional logic
+                // Enrollment Date is OPTIONAL now
+                if (el.id === 'enrollment_date') {
+                    el.removeAttribute('required');
+                    return;
+                }
+
                 if (isRequired) {
                     el.setAttribute('required', '');
                 } else {
@@ -74,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleAdmissionStatus(); // Initial run
 
     // Version Check
-    console.log('Enrollment Script V2.8 - Admission Status Logic');
+    console.log('Enrollment Script V2.9 - Admission Status & Optional Enrollment Date');
 
     // Form Submission
     form.addEventListener('submit', async (e) => {
@@ -93,8 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             // Formatting Date helper
-            const formatDate = (val) => {
-                if (!val) return '';
+            const formatDate = (val, isOptional = false) => {
+                if (!val) return isOptional ? 'UNKNOWN' : '';
                 const [y, m, d] = val.split('-');
                 return `${d}-${m}-${y}`;
             };
@@ -148,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (admission_status === 'Enrolled') {
                 enrollment_status = getRadio('enrollment_status');
-                enrollment_date = formatDate(getVal('enrollment_date'));
+                enrollment_date = formatDate(getVal('enrollment_date'), true); // UNKNOWN if empty
                 combo_package = getRadio('combo_package');
             } else if (admission_status === 'Demo') {
                 demo_start_date = formatDate(getVal('demo_start_date'));
