@@ -41,8 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Helper to toggle required attribute
         const setRequired = (container, isRequired) => {
             container.querySelectorAll('input, select, textarea').forEach(el => {
-                // Enrollment Date is OPTIONAL now
-                if (el.id === 'enrollment_date') {
+                // Enrollment Date and Potential Enrollment Date are OPTIONAL now
+                if (el.id === 'enrollment_date' || el.id === 'potential_enrollment_date') {
                     el.removeAttribute('required');
                     return;
                 }
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleAdmissionStatus(); // Initial run
 
     // Version Check
-    console.log('Enrollment Script V2.9 - Admission Status & Optional Enrollment Date');
+    console.log('Enrollment Script V3.0 - Admission Status & Optional Dates');
 
     // Form Submission
     form.addEventListener('submit', async (e) => {
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 combo_package = getRadio('combo_package');
             } else if (admission_status === 'Demo') {
                 demo_start_date = formatDate(getVal('demo_start_date'));
-                potential_enrollment_date = formatDate(getVal('potential_enrollment_date'));
+                potential_enrollment_date = formatDate(getVal('potential_enrollment_date'), true); // UNKNOWN if empty
             } else if (admission_status === 'Enquiry') {
                 enquiry_date = formatDate(getVal('enquiry_date'));
             }
