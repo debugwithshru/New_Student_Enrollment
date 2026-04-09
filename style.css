@@ -344,3 +344,28 @@ input:focus, select:focus, textarea:focus {
 .success-card p {
     color: #636e72;
 }
+
+/* Conditional Status Content */
+.status-content {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(243, 146, 0, 0.03);
+    border-radius: 16px;
+    border-left: 4px solid var(--primary-color);
+    animation: fadeInSlide 0.4s ease-out;
+}
+
+@keyframes fadeInSlide {
+    from { 
+        opacity: 0; 
+        transform: translateY(-10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+.hidden-section {
+    display: none;
+}

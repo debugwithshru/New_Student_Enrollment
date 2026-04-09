@@ -23,8 +23,58 @@ document.addEventListener('DOMContentLoaded', () => {
     // Webhook Configuration - CHANGE THIS LINE FOR PRODUCTION
     const WEBHOOK_URL = 'https://n8n.srv1498466.hstgr.cloud/webhook/f2e3f88d-e79d-4bd4-8dba-33966dde2bde'; 
 
+    // Admission Status Logic
+    const admissionRadios = document.querySelectorAll('input[name="admission_status"]');
+    const enrolledFields = document.getElementById('enrolledFields');
+    const demoFields = document.getElementById('demoFields');
+    const enquiryFields = document.getElementById('enquiryFields');
+    const enquiryDateInput = document.getElementById('enquiry_date');
+
+    function toggleAdmissionStatus() {
+        const selectedStatus = document.querySelector('input[name="admission_status"]:checked').value;
+        
+        // Hide all first
+        enrolledFields.style.display = 'none';
+        demoFields.style.display = 'none';
+        enquiryFields.style.display = 'none';
+
+        // Helper to toggle required attribute
+        const setRequired = (container, isRequired) => {
+            container.querySelectorAll('input, select, textarea').forEach(el => {
+                // Enrollment date and combo package are already conditional logic
+                if (isRequired) {
+                    el.setAttribute('required', '');
+                } else {
+                    el.removeAttribute('required');
+                }
+            });
+        };
+
+        // Reset all required
+        setRequired(enrolledFields, false);
+        setRequired(demoFields, false);
+        setRequired(enquiryFields, false);
+
+        if (selectedStatus === 'Enrolled') {
+            enrolledFields.style.display = 'block';
+            setRequired(enrolledFields, true);
+        } else if (selectedStatus === 'Demo') {
+            demoFields.style.display = 'block';
+            setRequired(demoFields, true);
+        } else if (selectedStatus === 'Enquiry') {
+            enquiryFields.style.display = 'block';
+            enquiryDateInput.setAttribute('required', '');
+            // Auto-set today's date
+            const today = new Date().toISOString().split('T')[0];
+            enquiryDateInput.value = today;
+        }
+    }
+
+    admissionRadios.forEach(r => r.addEventListener('change', toggleAdmissionStatus));
+    toggleAdmissionStatus(); // Initial run
+
     // Version Check
-    console.log('Enrollment Script V2.7 - Modified UI');
+    console.log('Enrollment Script V2.8 - Admission Status Logic');
 
     // Form Submission
     form.addEventListener('submit', async (e) => {
@@ -42,23 +92,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 return el ? el.value : null;
             };
 
+            // Formatting Date helper
+            const formatDate = (val) => {
+                if (!val) return '';
+                const [y, m, d] = val.split('-');
+                return `${d}-${m}-${y}`;
+            };
+
             // Basic Info
             const first_name = getVal('first_name');
             const last_name = getVal('last_name');
             const gender = getRadio('gender');
-            const dobRaw = getVal('dob');
+            const dob = formatDate(getVal('dob'));
             const grade = getRadio('grade');
             const branch = getRadio('branch');
             const school_name = getVal('school_name');
             const prior_school_name = getVal('prior_school_name');
             const address = getVal('address');
-
-            // Format DOB to dd-mm-yyyy
-            let dob = '';
-            if (dobRaw) {
-                const [y, m, d] = dobRaw.split('-');
-                dob = `${d}-${m}-${y}`;
-            }
 
             // Hobbies logic
             const hobbies_val = getVal('hobbies');
@@ -87,18 +137,29 @@ document.addEventListener('DOMContentLoaded', () => {
             const secondary_relation = getRadio('secondary_relation');
             const secondary_language = getVal('secondary_language') === 'Other' ? getVal('secondary_language_other') : getVal('secondary_language');
 
-            // Enrollment Details
-            const enrollment_status = getRadio('enrollment_status');
-            const enrollment_date_raw = getVal('enrollment_date');
+            // Admission & Enrollment Logic
+            const admission_status = getRadio('admission_status');
+            let enrollment_status = '';
             let enrollment_date = '';
-            if (enrollment_date_raw) {
-                const [y, m, d] = enrollment_date_raw.split('-');
-                enrollment_date = `${d}-${m}-${y}`;
+            let combo_package = '';
+            let demo_start_date = '';
+            let potential_enrollment_date = '';
+            let enquiry_date = '';
+
+            if (admission_status === 'Enrolled') {
+                enrollment_status = getRadio('enrollment_status');
+                enrollment_date = formatDate(getVal('enrollment_date'));
+                combo_package = getRadio('combo_package');
+            } else if (admission_status === 'Demo') {
+                demo_start_date = formatDate(getVal('demo_start_date'));
+                potential_enrollment_date = formatDate(getVal('potential_enrollment_date'));
+            } else if (admission_status === 'Enquiry') {
+                enquiry_date = formatDate(getVal('enquiry_date'));
             }
-            const combo_package = getRadio('combo_package');
 
             // Build Payload for n8n
             const payload = {
+                admission_status,
                 first_name,
                 last_name,
                 gender,
@@ -121,6 +182,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 enrollment_status,
                 enrollment_date,
                 combo_package,
+                demo_start_date,
+                potential_enrollment_date,
+                enquiry_date,
                 submission_date: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
             };
 
