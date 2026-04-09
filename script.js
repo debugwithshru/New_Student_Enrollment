@@ -200,10 +200,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(payload),
+                redirect: 'manual' // Prevent browser from following 302 redirects (avoids CORS errors)
             });
 
-            if (response.ok || response.status === 0) {
+            // redirect:'manual' means a 302 from n8n comes back as type 'opaqueredirect' (status 0)
+            // response.ok means n8n returned a normal 200 JSON response
+            if (response.ok || response.type === 'opaqueredirect') {
                 console.log('Successfully submitted');
                 
                 // Show 'FORM SUBMITTED' Overlay
@@ -215,6 +218,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.textContent = 'Submitted Successfully';
                 btn.style.background = '#00b894';
                 btn.disabled = true;
+
+                // If n8n returns JSON with a redirectUrl, handle client-side redirect
+                if (response.ok) {
+                    try {
+                        const data = await response.json();
+                        if (data.redirectUrl) {
+                            console.log('Redirecting to:', data.redirectUrl);
+                            setTimeout(() => { window.location.href = data.redirectUrl; }, 1500);
+                        }
+                    } catch(e) { /* No JSON body - that's fine */ }
+                }
             } else {
                 throw new Error('Server responded with ' + response.status);
             }
